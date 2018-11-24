@@ -14,9 +14,15 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+	return $request->user();
 });
 // get api resources
 Route::resource('/todo','TodoController', [
-    'except' =>['edit','show']
+	'except' =>['edit','show']
 ]);
+
+
+Route::middleware(['cors'])->group(function () {
+	Route::get('/todo_list','TodoController@getList');
+	Route::post('/save_todo','TodoController@saveTodo');
+});
