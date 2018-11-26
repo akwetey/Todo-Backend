@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Todo;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Faker\Generator;
 use Symfony\Component\HttpFoundation\Response;
@@ -73,7 +74,21 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
-        TOdo::destroy($id);
+        Todo::destroy($id);
         return response(null, RESPONSE::HTTP_OK);
+    }
+
+
+    public function getlist(){
+     return    DB::table('todos')->get();    
+    }
+
+
+    public function saveTodo(Request $request){
+        $title   = $request->post('data')['title'];
+        $project = $request->post('data')['project'];
+        $done    = $request->post('data')['done'];
+        DB::table('todos')->insert(['title' => $title, 'project' => $project,'created_at'=>date('Y-m-d h:i:s'),'updated_at'=>date('Y-m-d h:i:s')]);
+        return json_encode(['status'=>201,'message'=>'todo created successfully']);
     }
 }
