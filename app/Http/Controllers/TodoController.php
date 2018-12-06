@@ -15,6 +15,7 @@ class TodoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         return response(Todo::all()->jsonSerialize(), Response::HTTP_OK);
@@ -63,7 +64,7 @@ class TodoController extends Controller
         $todo->title = $request->title;
         $todo->project = $request->project;
         $todo->save();
-        return response(null, RESPONSE::HTTP_OK);
+        return response($todo->jsonSerialize(), RESPONSE::HTTP_OK);
     }
 
     /**
@@ -72,33 +73,30 @@ class TodoController extends Controller
      * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        Todo::destroy($id);
-        return response(null, RESPONSE::HTTP_OK);
+        $todo = Todo::findOrFail($id);
+        $todo->destroy($id);
+        return response($todo->jsonSerialize(), RESPONSE::HTTP_NO_CONTENT);
+        //return response($todo);
     }
 
     public function show($id){
         $todo = Todo::findOrFail($id);
-        return response(null, RESPONSE::HTTP_OK);
+       return response ($todo->jsonSerialize(),RESPONSE::HTTP_OK);
+       //echo $id;
     }
-
 
     public function getlist(){
      return    DB::table('todos')->get();
     }
 
-
-    public function saveTodo(Request $request){
+     public function saveTodo(Request $request){
         $title   = $request->post('data')['title'];
         $project = $request->post('data')['project'];
         $done    = $request->post('data')['done'];
         DB::table('todos')->insert(['title' => $title, 'project' => $project,'created_at'=>date('Y-m-d h:i:s'),'updated_at'=>date('Y-m-d h:i:s')]);
         return json_encode(['status'=>201,'message'=>'todo created successfully']);
     }
-    public function edit($id)
-    {
-      $todo = Todo::find($id);
-     return response(null, RESPONSE::HTTP_OK);
-    }
+
 }

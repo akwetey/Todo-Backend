@@ -16,13 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
 	return $request->user();
 });
-// update api routes
-Route::post('todo/post','TodoController@store');
+// updated api routes
+Route::post('todos','TodoController@store');
 Route::get('todos', 'TodoController@index');
-Route::get('todo/{id}', 'TodoController@show');
-Route::get('todo/edit/{id}','TodoController@edit');
-Route::put('todo/update/{id}','TodoController@update');
-Route::delete('todo/delete/{id}' , 'TodoController@destroy');
+Route::get('todos/{id}', 'TodoController@show');
+Route::put('todos/{id}','TodoController@update');
+Route::delete('todos/{id}','TodoController@destroy');
+//Route::post('todos', 'TodoController@create');
 
 Route::middleware(['cors'])->group(function () {
 	Route::get('/todo_list','TodoController@getList');
