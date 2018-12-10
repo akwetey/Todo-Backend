@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Todo;
+use App\Http\Resources\Todo as TodoResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+//use App\Http\Requests;
 use Faker\Generator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,7 +20,10 @@ class TodoController extends Controller
 
     public function index()
     {
-        return response(Todo::all()->jsonSerialize(), Response::HTTP_OK);
+        $todo =Todo::paginate(10);
+        //return collection of todo as a resource
+        return TodoResource::collection($todo);
+
     }
 
     /**
@@ -48,7 +53,7 @@ class TodoController extends Controller
         $todo->title = $request ->title;
         $todo->project = $request->project;
         $todo->save();
-        return response($todo->jsonSerialize(), Response::HTTP_CREATED);
+        return new TodoResource($todo);
     }
 
     /**
@@ -64,27 +69,28 @@ class TodoController extends Controller
         $todo->title = $request->title;
         $todo->project = $request->project;
         $todo->save();
-        return response($todo->jsonSerialize(), RESPONSE::HTTP_OK);
+        return new TodoResource($todo);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified   from storage.
      *
      * @param  \App\Todo  $todo
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, $id)
     {
+        // delete a single todo
         $todo = Todo::findOrFail($id);
         $todo->destroy($id);
-        return response($todo->jsonSerialize(), RESPONSE::HTTP_NO_CONTENT);
-        //return response($todo);
+        return new TodoResource($todo);
+
     }
 
     public function show($id){
+        //get a single todo
         $todo = Todo::findOrFail($id);
-       return response ($todo->jsonSerialize(),RESPONSE::HTTP_OK);
-       //echo $id;
+       return new TodoResource($todo);
     }
 
     public function getlist(){
