@@ -26,6 +26,6 @@ Route::delete('todos/{id}','TodoController@destroy');
 
 Route::middleware(['cors'])->group(function () {
 	Route::get('/todo_list','TodoController@getList');
-    Route::post('/save_todo','TodoController@saveTodo');
-
+	Route::post('/save_todo','TodoController@saveTodo');
+	Route::post('/delete_todo','TodoController@deleteTodo');
 });
