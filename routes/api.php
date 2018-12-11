@@ -28,4 +28,7 @@ Route::middleware(['cors'])->group(function () {
 	Route::get('/todo_list','TodoController@getList');
 	Route::post('/save_todo','TodoController@saveTodo');
 	Route::post('/delete_todo','TodoController@deleteTodo');
+	Route::post('/complete_todo','TodoController@completeTodo');
+	Route::post('/update_todo','TodoController@updateTodo');
+
 });
