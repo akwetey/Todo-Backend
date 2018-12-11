@@ -115,7 +115,6 @@ class TodoController extends Controller
         return json_encode(['status'=>200,'message'=>'todo deleted successfully']);
     }
 
-<<<<<<< HEAD
     public function completeTodo(Request $request){
         $id   = $request->post('data')['id'];
         DB::table('todos')
@@ -141,6 +140,4 @@ class TodoController extends Controller
             ]);
         return json_encode(['status'=>200,'message'=>'todo updated successfully']);
     }
-=======
->>>>>>> 36d54cf52311c90912dfd22e34de4eaee000aa69
 }
