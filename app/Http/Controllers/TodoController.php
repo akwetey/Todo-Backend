@@ -107,7 +107,7 @@ class TodoController extends Controller
 
     public function deleteTodo(Request $request){
         $id   = $request->post('data')['id'];
-        DB::table('users')->where('id', '=', $id)->delete();
+        DB::table('todos')->where('id', '=', $id)->delete();
         return json_encode(['status'=>200,'message'=>'todo deleted successfully']);
     }
 
