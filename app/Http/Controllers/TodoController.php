@@ -100,8 +100,12 @@ class TodoController extends Controller
      public function saveTodo(Request $request){
         $title   = $request->post('data')['title'];
         $project = $request->post('data')['project'];
-        $done    = $request->post('data')['done'];
-        DB::table('todos')->insert(['title' => $title, 'project' => $project,'created_at'=>date('Y-m-d h:i:s'),'updated_at'=>date('Y-m-d h:i:s')]);
+        DB::table('todos')->insert([
+            'title'       => $title,
+            'project'     => $project,
+            'is_complete' => 0,
+            'created_at'  => date('Y-m-d h:i:s'),
+            'updated_at'  => date('Y-m-d h:i:s')]);
         return json_encode(['status'=>201,'message'=>'todo created successfully']);
     }
 
@@ -111,4 +115,32 @@ class TodoController extends Controller
         return json_encode(['status'=>200,'message'=>'todo deleted successfully']);
     }
 
+<<<<<<< HEAD
+    public function completeTodo(Request $request){
+        $id   = $request->post('data')['id'];
+        DB::table('todos')
+            ->where('id', $id)
+            ->update([
+                'is_complete' => 1,
+                'updated_at'  => date('Y-m-d h:i:s')
+            ]);
+        return json_encode(['status'=>200,'message'=>'todo completed successfully']);
+    }
+
+    public function updateTodo(Request $request)
+    {
+        $id      = $request->post('data')['id'];
+        $title   = $request->post('data')['title'];
+        $project = $request->post('data')['project'];
+        DB::table('todos')
+            ->where('id', $id)
+            ->update([
+                'title'     => $title,
+                'project'   => $project,
+                'updated_at'=> date('Y-m-d h:i:s')
+            ]);
+        return json_encode(['status'=>200,'message'=>'todo updated successfully']);
+    }
+=======
+>>>>>>> 36d54cf52311c90912dfd22e34de4eaee000aa69
 }
