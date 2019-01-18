@@ -6,7 +6,7 @@ use App\Todo;
 use App\Http\Resources\Todo as TodoResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-//use App\Http\Requests;
+use App\Http\Requests;
 use Faker\Generator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,9 +20,10 @@ class TodoController extends Controller
 
     public function index()
     {
-        $todo =Todo::paginate(10);
+        $todo =Todo::orderby(   'id', 'desc')->paginate(3);
         //return collection of todo as a resource
-        return TodoResource::collection($todo);
+        //return TodoResource::collection($todo);
+          return response()-> json($todo);
 
     }
 
@@ -37,6 +38,7 @@ class TodoController extends Controller
        $todo = new Todo ();
        $todo -> title = $faker->sentence(1);
        $todo-> project = $faker->sentence(1);
+       $todo->is_complete = 0;
        $todo->save();
        return response($todo->jsonSerialize(), Response::HTTP_CREATED);
     }
@@ -52,6 +54,7 @@ class TodoController extends Controller
         $todo = new Todo();
         $todo->title = $request ->title;
         $todo->project = $request->project;
+        $todo->is_complete = 0;
         $todo->save();
         return new TodoResource($todo);
     }
@@ -86,27 +89,9 @@ class TodoController extends Controller
         return new TodoResource($todo);
 
     }
-
-    public function show($id){
-        //get a single todo
-        $todo = Todo::findOrFail($id);
-       return new TodoResource($todo);
-    }
-
     public function getlist(){
      return    DB::table('todos')->get();
-    }
 
-     public function saveTodo(Request $request){
-        $title   = $request->post('data')['title'];
-        $project = $request->post('data')['project'];
-        DB::table('todos')->insert([
-            'title'       => $title,
-            'project'     => $project,
-            'is_complete' => 0,
-            'created_at'  => date('Y-m-d h:i:s'),
-            'updated_at'  => date('Y-m-d h:i:s')]);
-        return json_encode(['status'=>201,'message'=>'todo created successfully']);
     }
 
     public function deleteTodo(Request $request){
@@ -126,7 +111,19 @@ class TodoController extends Controller
         return json_encode(['status'=>200,'message'=>'todo completed successfully']);
     }
 
-    public function updateTodo(Request $request)
+      public function saveTodo(Request $request){
+        $title   = $request->post('data')['title'];
+        $project = $request->post('data')['project'];
+        DB::table('todos')->insert([
+            'title'       => $title,
+            'project'     => $project,
+            'is_complete' => 0,
+            'created_at'  => date('Y-m-d h:i:s'),
+            'updated_at'  => date('Y-m-d h:i:s')]);
+        return json_encode(['status'=>201,'message'=>'todo created successfully']);
+      }
+
+       public function updateTodo(Request $request)
     {
         $id      = $request->post('data')['id'];
         $title   = $request->post('data')['title'];
@@ -140,4 +137,6 @@ class TodoController extends Controller
             ]);
         return json_encode(['status'=>200,'message'=>'todo updated successfully']);
     }
+
+
 }

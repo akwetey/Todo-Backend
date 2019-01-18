@@ -14,10 +14,7 @@ class Todo extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'title'=> $this->title,
-            'project'=> $this->project
-        ];
+        return parent::toArray($request);
     }
     public function with($request){
         return[
